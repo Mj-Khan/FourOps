@@ -60,9 +60,14 @@ class MainActivity : AppCompatActivity() {
         addBtn.setOnClickListener { setOperation("+") }
         minusBtn.setOnClickListener { setOperation("-") }
         multiplyBtn.setOnClickListener { setOperation("*") }
-        divideBtn.setOnClickListener { setOperation("") }
+        divideBtn.setOnClickListener { setOperation("÷") }
+        percentageBtn.setOnClickListener {setOperation("%")  }
+
         equalBtn.setOnClickListener { calculateResult() }
         clearBtn.setOnClickListener { clearCalculator() }
+
+
+        backSpaceBtn.setOnClickListener {  }
     }
 
     private fun appendNumber(number: String) {
@@ -83,7 +88,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun calculateResult() {
-        //TODO: Add logic to show calculation results
+        try {
+            val secondNumber = resultTextView.text.toString().toDouble()
+
+            val result: Double = when(operator) {
+                "+" -> firstNum + secondNumber
+                "-" -> firstNum - secondNumber
+                "*" -> firstNum * secondNumber
+                "÷" -> firstNum / secondNumber
+                else -> secondNumber
+            }
+
+            previousCalculationTextView.text = "$firstNum $operator $secondNumber"
+            resultTextView.text = result.toString()
+            isNewOperation = true
+        } catch (e: Exception) {
+            resultTextView.text = "Error"
+
+        }
     }
 
     private fun clearCalculator() {
