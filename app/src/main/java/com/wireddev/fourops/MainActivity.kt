@@ -3,6 +3,7 @@ package com.wireddev.fourops
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
@@ -61,13 +62,21 @@ class MainActivity : AppCompatActivity() {
         minusBtn.setOnClickListener { setOperation("-") }
         multiplyBtn.setOnClickListener { setOperation("*") }
         divideBtn.setOnClickListener { setOperation("÷") }
-        percentageBtn.setOnClickListener {setOperation("%")  }
+        percentageBtn.setOnClickListener { setOperation("%") }
 
         equalBtn.setOnClickListener { calculateResult() }
         clearBtn.setOnClickListener { clearCalculator() }
 
 
-        backSpaceBtn.setOnClickListener {  }
+        backSpaceBtn.setOnClickListener { deleteNum()}
+    }
+
+    private fun deleteNum() {
+        if ( resultTextView.text.isNotEmpty() &&  resultTextView.text != "0.0" &&  resultTextView.text != "Error") {
+            resultTextView.text = resultTextView.text.dropLast( 1)
+        } else {
+            Toast.makeText(this, "Invalid Operation", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun appendNumber(number: String) {
@@ -91,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         try {
             val secondNumber = resultTextView.text.toString().toDouble()
 
-            val result: Double = when(operator) {
+            val result: Double = when (operator) {
                 "+" -> firstNum + secondNumber
                 "-" -> firstNum - secondNumber
                 "*" -> firstNum * secondNumber
@@ -104,11 +113,14 @@ class MainActivity : AppCompatActivity() {
             isNewOperation = true
         } catch (e: Exception) {
             resultTextView.text = "Error"
-
         }
     }
 
     private fun clearCalculator() {
-        //TODO: Add logic for clearing the calculation
+       resultTextView.text = "0.0"
+        previousCalculationTextView.text = ""
+        firstNum = 0.0
+        isNewOperation = true
+        operator = ""
     }
 }
